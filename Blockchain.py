@@ -33,7 +33,6 @@ class Blockchain:
 	def get_last_block(self):
 		return self.chain[-1]
 
-
 	def add_data(self):
 
 		ch = 'Y'
@@ -43,7 +42,6 @@ class Blockchain:
 			rec = input("Enter the record: ")
 			data[idd] = rec
 			ch = input("Press (Y) to enter more records: ")
-			print(data)
 		self.curr_data = data
 		self.Create_Block()
 
@@ -55,27 +53,43 @@ class Blockchain:
 		idd = input("Enter the id whose records u want to see..")
 		disp_data = []
 		for x in self.chain:
-			disp_data.append(x.data.get(idd , None))
-
-		disp_data.remove(None)
+			if x.data.get(idd) is not None:
+				disp_data.append(x.data.get(idd))
+			
 		if(len(disp_data) == 0):
 			print("The given id could not be found.")
 		else:
-			print("Here are the medical records of ID: " + str(id))
+			print("Here are the medical records of ID: " + str(idd))
 			for x in disp_data:
 				print(x)
+
+	def see_block(self):
+		for x in reversed(self.chain):
+			self.disp_block(x)
+	
+	def disp_block(self , blk):
+		print("\n")
+		print("Height = ", blk.height)
+		print("Prev Block Hash = ", blk.prev_hash)
+		print("Data in the Block = ", blk.data)
+		print("hash of the Block = ", blk.hash)
+		print("Creation Time = ", blk.timestamp)
+		print("\n")
+
 
 
 
 
 bc = Blockchain()
-print(bc.chain[0].hash)
-
 while(1):
-	ch = input("1 - Add Data \n2 - Display Chain \n3 - Display Specific Records:- ")
+	ch = input("\n1 - Add Data \n2 - Display Chain \n3 - Display Specific Records \n4 - To see the Chain")
 	if ch == '1':
 		bc.add_data()
 	elif ch == '2':
 		bc.disp_chain()
 	elif ch == '3':
 		bc.see_records()
+	elif ch == '4':
+		bc.see_block()
+	else:
+		print("! Wrong Choice !\n")
